@@ -1,6 +1,7 @@
 package;
 
 import bomberman.api.DiscordClient;
+import bomberman.data.PlayerSettings;
 import bomberman.game.PlayState;
 import flixel.FlxGame;
 import openfl.display.Sprite;
@@ -17,6 +18,10 @@ class Main extends Sprite
 
 	function init()
 	{
+		#if DISCORD_RPC
 		DiscordClient.init();
+		#end
+
+		PlayerSettings.init();
 	}
 }

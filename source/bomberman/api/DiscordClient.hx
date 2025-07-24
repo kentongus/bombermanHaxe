@@ -1,19 +1,15 @@
 package bomberman.api;
 
-import sys.thread.Thread;
-
 #if DISCORD_RPC
 import hxdiscord_rpc.Discord;
 import hxdiscord_rpc.Types;
-#end
+import sys.thread.Thread;
 
 class DiscordClient {
     static final clientID:String = "1397755818480373801";
 
-    static var thread:Null<Thread> = null;
-
-    public static function init() {
-        #if DISCORD_RPC
+	public static function init()
+	{
         var handlers:DiscordEventHandlers = DiscordEventHandlers.create();
         handlers.ready = cpp.Function.fromStaticFunction(onReady);
         handlers.disconnected = cpp.Function.fromStaticFunction(onDisconnect);
@@ -21,11 +17,9 @@ class DiscordClient {
 
         Discord.Initialize(clientID, cpp.RawPointer.addressOf(handlers), 1, null);
 
-        thread = Thread.create(discordRPCUpdate);
-        #end
+		Thread.create(discordRPCUpdate);
     }
 
-    #if DISCORD_RPC
     private static function discordRPCUpdate():Void {
         while (true) {
             #if DISCORD_DISABLE_IO_THREAD
@@ -36,10 +30,8 @@ class DiscordClient {
 
             Sys.sleep(2);
         }
-    }
-    #end
+	}
 
-    #if DISCORD_RPC
     public static function onReady(request:cpp.RawConstPointer<DiscordUser>) {
         trace('[DISCORD] Successfully connected to user "${request[0].username}"!');
     }
@@ -50,11 +42,10 @@ class DiscordClient {
 
     public static function onError(error:Int, message:cpp.ConstCharStar) {
         throw '[DISCORD] AN ERROR OCURRED! (Error code: $error | Message: ${cast(message, String)})';
-    }
-    #end
+	}
 
-    public static function changePresence(params:DiscordRPCParams) {
-        #if DISCORD_RPC
+	public static function changePresence(params:DiscordRPCParams)
+	{
         var presence:DiscordRichPresence = DiscordRichPresence.create();
 
         presence.activityType = ActivityType.Playing;
@@ -74,22 +65,14 @@ class DiscordClient {
         // The key name of the image inside the RPC assets.
         presence.smallImageKey = cast(params.smallImageKey, Null<String>) ?? "";
 
-        Discord.UpdatePresence(cpp.RawConstPointer.addressOf(presence));
-        #end
+		Discord.UpdatePresence(cpp.RawConstPointer.addressOf(presence));
     }
 
 	public static function clearPresence()
-	{
-		#if DISCORD_RPC
 		Discord.ClearPresence();
-		#end
-	}
 
-    public static function shutdown() {
-        #if DISCORD_RPC
-        Discord.Shutdown();
-        #end
-    }
+	public static function shutdown()
+		Discord.Shutdown();
 }
 
 typedef DiscordRPCParams = {
@@ -108,7 +91,7 @@ typedef DiscordRPCParams = {
     /**
      * What the user is doing.
      */
-    var ?activity:ActivityType;
+	var ?activity:ActivityType;
 
     /**
      * The image to display in the Discord RPC.
@@ -129,3 +112,4 @@ typedef DiscordRPCParams = {
      */
     var ?smallImageText:String;
 }
+#end
