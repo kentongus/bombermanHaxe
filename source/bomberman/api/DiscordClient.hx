@@ -78,6 +78,13 @@ class DiscordClient {
         #end
     }
 
+	public static function clearPresence()
+	{
+		#if DISCORD_RPC
+		Discord.ClearPresence();
+		#end
+	}
+
     public static function shutdown() {
         #if DISCORD_RPC
         Discord.Shutdown();
