@@ -19,12 +19,12 @@ class PlayState extends BaseState
 	{
 		super.update(elapsed);
 		if (controls.A)
-			trace("pressed A button!");
+			trace("Player 1 pressed the A button!");
 		if (controls.B)
-			trace("pressed B button!");
+			trace("Player 1 pressed the B button!");
 		if (controls.X)
-			trace("pressed X button!");
+			trace("Player 1 pressed the X button!");
 		if (controls.Y)
-			trace("pressed Y button!");
+			trace("Player 1 pressed the Y button!");
 	}
 }
